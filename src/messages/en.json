@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "Festivals Morocco - Art & Cultural Events",
+    "description": "Discover art exhibitions, cultural festivals, music events, and heritage celebrations across Morocco."
+  },
+  "header": {
+    "discover": "Discover",
+    "about": "About",
+    "language": "Language"
+  },
+  "search": {
+    "placeholder": "Search festivals, events, artists...",
+    "region": "Region",
+    "allRegions": "All Regions",
+    "date": "Date",
+    "anyDate": "Any Date",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "customRange": "Custom Range",
+    "visual": "Visual",
+    "advanced": "Advanced",
+    "categories": "Categories",
+    "filters": "Filters",
+    "priceRange": "Price Range",
+    "free": "Free Events Only",
+    "accessibility": "Accessibility",
+    "wheelchair": "Wheelchair Access",
+    "signLanguage": "Sign Language",
+    "audioDescription": "Audio Description",
+    "apply": "Apply",
+    "clear": "Clear All",
+    "results": "Results",
+    "noResults": "No events found",
+    "tryDifferent": "Try different search criteria"
+  },
+  "calendar": {
+    "title": "Select Date",
+    "quickSelect": "Quick Select",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "confirm": "Confirm"
+  },
+  "event": {
+    "details": "Event Details",
+    "date": "Date",
+    "location": "Location",
+    "venue": "Venue",
+    "price": "Price",
+    "free": "Free",
+    "organizer": "Organizer",
+    "website": "Visit Website",
+    "accessibility": "Accessibility",
+    "share": "Share",
+    "directions": "Directions",
+    "similar": "Similar Events"
+  },
+  "categories": {
+    "music": "Music",
+    "art": "Art",
+    "film": "Film",
+    "dance": "Dance",
+    "theatre": "Theatre",
+    "heritage": "Heritage",
+    "food": "Food",
+    "literature": "Literature",
+    "craft": "Craft",
+    "spiritual": "Spiritual"
+  },
+  "footer": {
+    "allEvents": "All Events",
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "All rights reserved"
+  }
+}

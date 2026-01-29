@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "Festivals Maroc - Événements Artistiques et Culturels",
+    "description": "Découvrez les expositions d'art, festivals culturels, événements musicaux et célébrations du patrimoine à travers le Maroc."
+  },
+  "header": {
+    "discover": "Découvrir",
+    "about": "À Propos",
+    "language": "Langue"
+  },
+  "search": {
+    "placeholder": "Rechercher festivals, événements, artistes...",
+    "region": "Région",
+    "allRegions": "Toutes les Régions",
+    "date": "Date",
+    "anyDate": "Toute Date",
+    "today": "Aujourd'hui",
+    "thisWeek": "Cette Semaine",
+    "thisMonth": "Ce Mois",
+    "customRange": "Plage Personnalisée",
+    "visual": "Visuel",
+    "advanced": "Avancé",
+    "categories": "Catégories",
+    "filters": "Filtres",
+    "priceRange": "Gamme de Prix",
+    "free": "Événements Gratuits",
+    "accessibility": "Accessibilité",
+    "wheelchair": "Accès Fauteuil Roulant",
+    "signLanguage": "Langue des Signes",
+    "audioDescription": "Audiodescription",
+    "apply": "Appliquer",
+    "clear": "Tout Effacer",
+    "results": "Résultats",
+    "noResults": "Aucun événement trouvé",
+    "tryDifferent": "Essayez différents critères"
+  },
+  "calendar": {
+    "title": "Sélectionner une Date",
+    "quickSelect": "Sélection Rapide",
+    "startDate": "Date de Début",
+    "endDate": "Date de Fin",
+    "confirm": "Confirmer"
+  },
+  "event": {
+    "details": "Détails de l'Événement",
+    "date": "Date",
+    "location": "Lieu",
+    "venue": "Salle",
+    "price": "Prix",
+    "free": "Gratuit",
+    "organizer": "Organisateur",
+    "website": "Visiter le Site",
+    "accessibility": "Accessibilité",
+    "share": "Partager",
+    "directions": "Itinéraire",
+    "similar": "Événements Similaires"
+  },
+  "categories": {
+    "music": "Musique",
+    "art": "Art",
+    "film": "Cinéma",
+    "dance": "Danse",
+    "theatre": "Théâtre",
+    "heritage": "Patrimoine",
+    "food": "Gastronomie",
+    "literature": "Littérature",
+    "craft": "Artisanat",
+    "spiritual": "Spirituel"
+  },
+  "footer": {
+    "allEvents": "Tous les Événements",
+    "about": "À Propos",
+    "privacy": "Politique de Confidentialité",
+    "terms": "Conditions d'Utilisation",
+    "copyright": "Tous droits réservés"
+  }
+}

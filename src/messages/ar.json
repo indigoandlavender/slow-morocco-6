@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "مهرجانات المغرب - الفعاليات الفنية والثقافية",
+    "description": "اكتشف المعارض الفنية والمهرجانات الثقافية والفعاليات الموسيقية واحتفالات التراث في جميع أنحاء المغرب."
+  },
+  "header": {
+    "discover": "اكتشف",
+    "about": "عن",
+    "language": "اللغة"
+  },
+  "search": {
+    "placeholder": "البحث عن المهرجانات، الفعاليات، الفنانين...",
+    "region": "المنطقة",
+    "allRegions": "جميع المناطق",
+    "date": "التاريخ",
+    "anyDate": "أي تاريخ",
+    "today": "اليوم",
+    "thisWeek": "هذا الأسبوع",
+    "thisMonth": "هذا الشهر",
+    "customRange": "نطاق مخصص",
+    "visual": "بصري",
+    "advanced": "متقدم",
+    "categories": "الفئات",
+    "filters": "الفلاتر",
+    "priceRange": "نطاق السعر",
+    "free": "فعاليات مجانية فقط",
+    "accessibility": "إمكانية الوصول",
+    "wheelchair": "وصول الكراسي المتحركة",
+    "signLanguage": "لغة الإشارة",
+    "audioDescription": "الوصف الصوتي",
+    "apply": "تطبيق",
+    "clear": "مسح الكل",
+    "results": "النتائج",
+    "noResults": "لم يتم العثور على فعاليات",
+    "tryDifferent": "جرب معايير مختلفة"
+  },
+  "calendar": {
+    "title": "اختر التاريخ",
+    "quickSelect": "اختيار سريع",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
+    "confirm": "تأكيد"
+  },
+  "event": {
+    "details": "تفاصيل الفعالية",
+    "date": "التاريخ",
+    "location": "الموقع",
+    "venue": "المكان",
+    "price": "السعر",
+    "free": "مجاني",
+    "organizer": "المنظم",
+    "website": "زيارة الموقع",
+    "accessibility": "إمكانية الوصول",
+    "share": "مشاركة",
+    "directions": "الاتجاهات",
+    "similar": "فعاليات مشابهة"
+  },
+  "categories": {
+    "music": "موسيقى",
+    "art": "فن",
+    "film": "سينما",
+    "dance": "رقص",
+    "theatre": "مسرح",
+    "heritage": "تراث",
+    "food": "طعام",
+    "literature": "أدب",
+    "craft": "حرف",
+    "spiritual": "روحاني"
+  },
+  "footer": {
+    "allEvents": "جميع الفعاليات",
+    "about": "عن",
+    "privacy": "سياسة الخصوصية",
+    "terms": "شروط الخدمة",
+    "copyright": "جميع الحقوق محفوظة"
+  }
+}

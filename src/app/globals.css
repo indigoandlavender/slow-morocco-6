@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Warm earth palette */
+  --color-background: #FDFCFA;
+  --color-foreground: #1C1917;
+  --color-accent: #92400E;
+  --color-accent-hover: #78350F;
+  --color-accent-light: #FEF3C7;
+  --color-muted: #78716C;
+  --color-border: #E7E5E4;
+  --color-sand: #F5F5F4;
+  --color-cream: #FAFAF9;
+  --color-warm: #FEF7ED;
+
+  /* Footer ombré */
+  --color-footer-1: #292524;
+  --color-footer-2: #1C1917;
+  --color-footer-3: #0C0A09;
+  --color-footer-4: #000000;
+
+  /* Typography */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* RTL */
+[dir="rtl"] {
+  text-align: right;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Container utility */
+.container-narrow {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.container-wide {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media (min-width: 768px) {
+  .container-narrow {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+  .container-wide {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-accent-light);
+}
+
+/* Mapbox */
+.mapboxgl-map {
+  font-family: var(--font-body) !important;
+}
+.mapboxgl-popup-content {
+  font-family: var(--font-body) !important;
+  padding: 16px !important;
+  border-radius: 0 !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+}

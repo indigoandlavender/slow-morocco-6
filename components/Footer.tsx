@@ -124,7 +124,6 @@ export default function Footer() {
     { label: "Terms", href: "/terms" },
     { label: "Privacy", href: "/privacy" },
     { label: "Cancellation", href: "/cancellation-policy" },
-    { label: "Glossary", href: "/glossary" },
   ];
   const copyright = footerData?.copyright || {
     year: new Date().getFullYear(),
@@ -251,7 +250,6 @@ export default function Footer() {
                     <li><Link href="/plan-your-trip" className="text-sm text-white/60 hover:text-white transition-colors">Plan Your Trip</Link></li>
                     <li><Link href="/faq" className="text-sm text-white/60 hover:text-white transition-colors">FAQ</Link></li>
                     <li><Link href="/whats-included" className="text-sm text-white/60 hover:text-white transition-colors">What's Included</Link></li>
-                    <li><Link href="/glossary" className="text-sm text-white/60 hover:text-white transition-colors">Glossary</Link></li>
                   </ul>
                 </div>
                 <div>
@@ -271,7 +269,54 @@ export default function Footer() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          LEVEL 3: Legal & Copyright (from Nexus)
+          LEVEL 3: Slow World Network
+          ═══════════════════════════════════════════════════════════════ */}
+      <section className="py-8 bg-[#121212]">
+        <div className="container mx-auto px-8 md:px-16 lg:px-20">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-4 md:gap-8">
+            <span className="text-[10px] tracking-[0.2em] uppercase text-white/20">
+              Slow World
+            </span>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <a
+                href="https://slowmauritius.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs tracking-[0.1em] text-white/40 hover:text-white/70 transition-colors"
+              >
+                Mauritius
+              </a>
+              <a
+                href="https://slownamibia.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs tracking-[0.1em] text-white/40 hover:text-white/70 transition-colors"
+              >
+                Namibia
+              </a>
+              <a
+                href="https://slowtunisia.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs tracking-[0.1em] text-white/40 hover:text-white/70 transition-colors"
+              >
+                Tunisia
+              </a>
+              <a
+                href="https://slowturkiye.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs tracking-[0.1em] text-white/40 hover:text-white/70 transition-colors"
+              >
+                Türkiye
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          LEVEL 4: Legal & Copyright (from Nexus)
           ═══════════════════════════════════════════════════════════════ */}
       <section className="py-6 bg-[#0e0e0e]">
         <div className="container mx-auto px-8 md:px-16 lg:px-20">
