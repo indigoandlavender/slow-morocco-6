@@ -64,6 +64,7 @@ interface Journey {
   journeyType?: string;
   epicPrice?: number;
   price?: number;
+  destinations?: string;
 }
 
 interface ItineraryDay {
@@ -83,63 +84,42 @@ interface ItineraryDay {
 // Journeys Carousel Component
 function JourneysCarousel({ currentSlug }: { currentSlug: string }) {
   const [journeys, setJourneys] = useState<Journey[]>([]);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const containerRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/journeys")
       .then((r) => r.json())
       .then((data) => {
-        // Filter out current journey
+        // Filter out current journey and epic journeys
         const otherJourneys = (data.journeys || []).filter(
-          (j: Journey) => j.slug !== currentSlug
+          (j: Journey) => j.slug !== currentSlug && j.journeyType !== "epic"
         );
         setJourneys(otherJourneys);
       })
       .catch(console.error);
   }, [currentSlug]);
 
-  const scroll = (direction: "left" | "right") => {
-    const container = containerRef.current;
-    if (!container) return;
-    
-    const cardWidth = 280 + 24; // card width + gap
-    const scrollAmount = direction === "left" ? -cardWidth * 2 : cardWidth * 2;
-    
-    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-  };
-
-  const handleScroll = () => {
-    if (containerRef.current) {
-      setScrollPosition(containerRef.current.scrollLeft);
-    }
-  };
-
   if (journeys.length === 0) return null;
-
-  const canScrollLeft = scrollPosition > 0;
-  const canScrollRight = containerRef.current
-    ? scrollPosition < containerRef.current.scrollWidth - containerRef.current.clientWidth - 10
-    : true;
 
   return (
     <div className="relative">
       {/* Left Arrow */}
       <button
-        onClick={() => scroll("left")}
-        className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center transition-opacity ${
-          canScrollLeft ? "opacity-100 hover:bg-muted" : "opacity-0 pointer-events-none"
-        }`}
-        aria-label="Scroll left"
+        onClick={() => {
+          const container = document.getElementById('more-journeys-carousel');
+          if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
+        }}
+        className="absolute -left-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
+        aria-label="Previous"
       >
-        <ChevronLeft className="w-5 h-5" />
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <polyline points="10,3 5,8 10,13" />
+        </svg>
       </button>
 
       {/* Carousel Container */}
       <div
-        ref={containerRef}
-        onScroll={handleScroll}
-        className="flex gap-6 overflow-x-auto scrollbar-hide px-12"
+        id="more-journeys-carousel"
+        className="flex gap-6 overflow-x-auto scrollbar-hide"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {journeys.map((journey) => (
@@ -158,30 +138,130 @@ function JourneysCarousel({ currentSlug }: { currentSlug: string }) {
                 />
               )}
             </div>
-            <h3 className="font-serif text-lg mb-1">{journey.title}</h3>
-            <div className="flex items-baseline justify-between">
-              <p className="text-xs text-muted-foreground tracking-wide">
-                {journey.durationDays} Days
-              </p>
-              {Number((journey as any).price) > 0 && (
-                <p className="text-xs text-muted-foreground">
-                  From €{Number((journey as any).price).toLocaleString()}
-                </p>
-              )}
-            </div>
+            <p className="text-xs text-muted-foreground tracking-wide mb-1">
+              {journey.durationDays} Days
+            </p>
+            <h3 className="font-serif text-lg group-hover:opacity-70 transition-opacity">{journey.title}</h3>
           </Link>
         ))}
       </div>
 
       {/* Right Arrow */}
       <button
-        onClick={() => scroll("right")}
-        className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center transition-opacity ${
-          canScrollRight ? "opacity-100 hover:bg-muted" : "opacity-0 pointer-events-none"
-        }`}
-        aria-label="Scroll right"
+        onClick={() => {
+          const container = document.getElementById('more-journeys-carousel');
+          if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
+        }}
+        className="absolute -right-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
+        aria-label="Next"
       >
-        <ChevronRight className="w-5 h-5" />
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <polyline points="6,3 11,8 6,13" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+// Related Stories Carousel Component
+function RelatedStoriesCarousel({ journey }: { journey: Journey & { destinations?: string } }) {
+  const [stories, setStories] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/stories")
+      .then((r) => r.json())
+      .then((data) => {
+        const allStories = data.stories || [];
+        const destinations = (journey.destinations || "").toLowerCase();
+        const focus = (journey.focus || "").toLowerCase();
+        
+        // Match stories by tags or region against journey destinations/focus
+        const matched = allStories.filter((s: any) => {
+          const storyTags = (s.tags || "").toLowerCase();
+          const storyRegion = (s.region || "").toLowerCase();
+          
+          // Check if any destination appears in story tags or region
+          const destWords = destinations.split(/[,|]/).map((d: string) => d.trim()).filter(Boolean);
+          for (const dest of destWords) {
+            if (storyTags.includes(dest) || storyRegion.includes(dest)) return true;
+          }
+          
+          // Check focus against tags
+          if (focus && storyTags.includes(focus)) return true;
+          
+          return false;
+        });
+        
+        // If matches found use them, otherwise show first few stories
+        if (matched.length > 0) {
+          setStories(matched.slice(0, 6));
+        } else {
+          setStories(allStories.slice(0, 6));
+        }
+      })
+      .catch(console.error);
+  }, [journey]);
+
+  if (stories.length === 0) return null;
+
+  return (
+    <div className="relative">
+      {/* Left Arrow */}
+      <button
+        onClick={() => {
+          const container = document.getElementById('related-stories-carousel');
+          if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
+        }}
+        className="absolute -left-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
+        aria-label="Previous"
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <polyline points="10,3 5,8 10,13" />
+        </svg>
+      </button>
+
+      {/* Carousel Container */}
+      <div
+        id="related-stories-carousel"
+        className="flex gap-6 overflow-x-auto scrollbar-hide"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {stories.map((story) => (
+          <Link
+            key={story.slug}
+            href={`/story/${story.slug}`}
+            className="flex-shrink-0 w-[260px] group"
+          >
+            <div className="relative aspect-[4/3] mb-3 overflow-hidden bg-[#e8e0d4]">
+              {story.heroImage && (
+                <Image
+                  src={story.heroImage}
+                  alt={story.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+              {story.category}
+            </p>
+            <h3 className="font-serif text-base group-hover:opacity-70 transition-opacity">{story.title}</h3>
+          </Link>
+        ))}
+      </div>
+
+      {/* Right Arrow */}
+      <button
+        onClick={() => {
+          const container = document.getElementById('related-stories-carousel');
+          if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
+        }}
+        className="absolute -right-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
+        aria-label="Next"
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <polyline points="6,3 11,8 6,13" />
+        </svg>
       </button>
     </div>
   );
@@ -576,9 +656,22 @@ export default function JourneyDetailPage() {
         </div>
       </section>
 
+      {/* Related Stories */}
+      <section className="py-16 md:py-20 border-t border-border">
+        <div className="container mx-auto px-6 lg:px-16 max-w-5xl">
+          <h2 className="uppercase tracking-wide text-xs font-medium mb-8 text-muted-foreground">
+            Related Stories
+          </h2>
+          <RelatedStoriesCarousel journey={journey as Journey & { destinations?: string }} />
+        </div>
+      </section>
+
       {/* More Journeys Carousel */}
       <section className="py-16 md:py-20 border-t border-border">
-        <div className="container mx-auto px-6 lg:px-16">
+        <div className="container mx-auto px-6 lg:px-16 max-w-5xl">
+          <h2 className="uppercase tracking-wide text-xs font-medium mb-8 text-muted-foreground">
+            More Journeys
+          </h2>
           <JourneysCarousel currentSlug={slug} />
         </div>
       </section>
