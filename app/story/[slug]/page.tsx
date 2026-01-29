@@ -524,33 +524,68 @@ export default function StoryPage() {
               <h3 className="uppercase tracking-wide text-xs font-medium mb-8 text-foreground/40">
                 Related Stories
               </h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                {relatedStories.map((related) => (
-                  <Link
-                    key={related.slug}
-                    href={`/story/${related.slug}`}
-                    className="group"
-                  >
-                    <div className="relative aspect-[4/3] mb-4 overflow-hidden bg-foreground/5">
-                      {related.heroImage ? (
-                        <Image
-                          src={related.heroImage}
-                          alt={related.title}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-foreground/5" />
-                      )}
-                    </div>
-                    <p className="text-xs text-foreground/40 uppercase tracking-wide mb-2">
-                      {related.category}
-                    </p>
-                    <h4 className="text-foreground group-hover:text-foreground/80 transition-colors font-serif">
-                      {related.title}
-                    </h4>
-                  </Link>
-                ))}
+              <div className="relative">
+                {/* Left Arrow */}
+                <button
+                  onClick={() => {
+                    const container = document.getElementById('related-stories-carousel');
+                    if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
+                  }}
+                  className="absolute -left-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
+                  aria-label="Previous"
+                >
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <polyline points="10,3 5,8 10,13" />
+                  </svg>
+                </button>
+
+                {/* Carousel */}
+                <div
+                  id="related-stories-carousel"
+                  className="flex gap-6 overflow-x-auto scrollbar-hide"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {relatedStories.map((related) => (
+                    <Link
+                      key={related.slug}
+                      href={`/story/${related.slug}`}
+                      className="group flex-shrink-0 w-[260px]"
+                    >
+                      <div className="relative aspect-[4/3] mb-4 overflow-hidden bg-foreground/5">
+                        {related.heroImage ? (
+                          <Image
+                            src={related.heroImage}
+                            alt={related.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-foreground/5" />
+                        )}
+                      </div>
+                      <p className="text-xs text-foreground/40 uppercase tracking-wide mb-2">
+                        {related.category}
+                      </p>
+                      <h4 className="text-foreground group-hover:text-foreground/80 transition-colors font-serif">
+                        {related.title}
+                      </h4>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Right Arrow */}
+                <button
+                  onClick={() => {
+                    const container = document.getElementById('related-stories-carousel');
+                    if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
+                  }}
+                  className="absolute -right-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
+                  aria-label="Next"
+                >
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <polyline points="6,3 11,8 6,13" />
+                  </svg>
+                </button>
               </div>
             </div>
           </>
@@ -564,33 +599,68 @@ export default function StoryPage() {
               <h3 className="uppercase tracking-wide text-xs font-medium mb-8 text-foreground/40">
                 Related Journeys
               </h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                {relatedJourneys.map((journey) => (
-                  <Link
-                    key={journey.slug}
-                    href={`/journeys/${journey.slug}`}
-                    className="group"
-                  >
-                    <div className="relative aspect-[16/10] mb-4 overflow-hidden bg-foreground/5">
-                      {journey.heroImage ? (
-                        <Image
-                          src={journey.heroImage}
-                          alt={journey.title}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-foreground/5" />
-                      )}
-                    </div>
-                    <p className="text-xs text-foreground/40 uppercase tracking-wide mb-2">
-                      {journey.durationDays} Days
-                    </p>
-                    <h4 className="text-foreground group-hover:text-foreground/80 transition-colors font-serif text-lg">
-                      {journey.title}
-                    </h4>
-                  </Link>
-                ))}
+              <div className="relative">
+                {/* Left Arrow */}
+                <button
+                  onClick={() => {
+                    const container = document.getElementById('related-journeys-carousel');
+                    if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
+                  }}
+                  className="absolute -left-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
+                  aria-label="Previous"
+                >
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <polyline points="10,3 5,8 10,13" />
+                  </svg>
+                </button>
+
+                {/* Carousel */}
+                <div
+                  id="related-journeys-carousel"
+                  className="flex gap-6 overflow-x-auto scrollbar-hide"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {relatedJourneys.map((journey) => (
+                    <Link
+                      key={journey.slug}
+                      href={`/journeys/${journey.slug}`}
+                      className="group flex-shrink-0 w-[280px]"
+                    >
+                      <div className="relative aspect-[4/5] mb-4 overflow-hidden bg-foreground/5">
+                        {journey.heroImage ? (
+                          <Image
+                            src={journey.heroImage}
+                            alt={journey.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-foreground/5" />
+                        )}
+                      </div>
+                      <p className="text-xs text-foreground/40 uppercase tracking-wide mb-2">
+                        {journey.durationDays} Days
+                      </p>
+                      <h4 className="text-foreground group-hover:text-foreground/80 transition-colors font-serif text-lg">
+                        {journey.title}
+                      </h4>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Right Arrow */}
+                <button
+                  onClick={() => {
+                    const container = document.getElementById('related-journeys-carousel');
+                    if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
+                  }}
+                  className="absolute -right-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
+                  aria-label="Next"
+                >
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <polyline points="6,3 11,8 6,13" />
+                  </svg>
+                </button>
               </div>
             </div>
           </>
