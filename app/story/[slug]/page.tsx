@@ -40,6 +40,7 @@ export default function StoryPage() {
   const [story, setStory] = useState<Story | null>(null);
   const [images, setImages] = useState<StoryImage[]>([]);
   const [relatedStories, setRelatedStories] = useState<Story[]>([]);
+  const [relatedJourneys, setRelatedJourneys] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -91,6 +92,41 @@ export default function StoryPage() {
         setRelatedStories(related.slice(0, 3));
       });
   }, [story, slug]);
+
+  // Fetch related journeys when main story loads
+  useEffect(() => {
+    if (!story) return;
+    
+    fetch("/api/journeys")
+      .then((res) => res.json())
+      .then((data) => {
+        const allJourneys = data.journeys || [];
+        const storyTags = story.tags
+          ? story.tags.toLowerCase().split(",").map((t) => t.trim())
+          : [];
+        const storyRegion = story.region?.toLowerCase() || "";
+        
+        const matched = allJourneys.filter((j: any) => {
+          // Skip epic journeys
+          if (j.journeyType === "epic") return false;
+          
+          const destinations = (j.destinations || "").toLowerCase();
+          const focus = (j.focus || "").toLowerCase();
+          
+          // Match story tags against journey destinations or focus
+          for (const tag of storyTags) {
+            if (destinations.includes(tag) || focus.includes(tag)) return true;
+          }
+          
+          // Match story region against journey destinations
+          if (storyRegion && destinations.includes(storyRegion)) return true;
+          
+          return false;
+        });
+        
+        setRelatedJourneys(matched.slice(0, 4));
+      });
+  }, [story]);
 
   if (loading) {
     return (
@@ -505,6 +541,46 @@ export default function StoryPage() {
                     </p>
                     <h4 className="text-foreground group-hover:text-foreground/80 transition-colors font-serif">
                       {related.title}
+                    </h4>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Related Journeys */}
+        {relatedJourneys.length > 0 && (
+          <>
+            <hr className="border-foreground/10 my-12" />
+            <div>
+              <h3 className="uppercase tracking-wide text-xs font-medium mb-8 text-foreground/40">
+                Related Journeys
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                {relatedJourneys.map((journey) => (
+                  <Link
+                    key={journey.slug}
+                    href={`/journeys/${journey.slug}`}
+                    className="group"
+                  >
+                    <div className="relative aspect-[16/10] mb-4 overflow-hidden bg-foreground/5">
+                      {journey.heroImage ? (
+                        <Image
+                          src={journey.heroImage}
+                          alt={journey.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-foreground/5" />
+                      )}
+                    </div>
+                    <p className="text-xs text-foreground/40 uppercase tracking-wide mb-2">
+                      {journey.durationDays} Days
+                    </p>
+                    <h4 className="text-foreground group-hover:text-foreground/80 transition-colors font-serif text-lg">
+                      {journey.title}
                     </h4>
                   </Link>
                 ))}
