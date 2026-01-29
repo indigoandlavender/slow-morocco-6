@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ChevronLeft, ChevronRight, MapPin, Clock, Ticket } from "lucide-react";
+import { ChevronLeft, MapPin, Clock, Ticket } from "lucide-react";
+import { linkGlossaryTermsHTML } from "@/lib/glossary-linker";
 
 
 interface Place {
@@ -194,10 +195,12 @@ export default function PlaceDetailPage() {
                 <div 
                   className="prose prose-lg max-w-none"
                   dangerouslySetInnerHTML={{ 
-                    __html: place.body
-                      .replace(/\n\n/g, '</p><p>')
-                      .replace(/^/, '<p>')
-                      .replace(/$/, '</p>')
+                    __html: linkGlossaryTermsHTML(
+                      place.body
+                        .replace(/\n\n/g, '</p><p>')
+                        .replace(/^/, '<p>')
+                        .replace(/$/, '</p>')
+                    )
                   }}
                 />
               )}

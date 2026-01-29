@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
+import { linkGlossaryTermsText } from "@/lib/glossary-linker";
 import {
   IconClock,
   IconCamel,
@@ -359,7 +360,7 @@ export default function JourneyDetailPage() {
             {/* The Promise */}
             <div className="mb-20">
               <p className="text-xl md:text-2xl text-white/80 leading-relaxed font-display italic">
-                {journey.description}
+                {linkGlossaryTermsText(journey.description)}
               </p>
             </div>
 
@@ -367,7 +368,7 @@ export default function JourneyDetailPage() {
             {journey.arcDescription && (
               <div className="mb-20">
                 <p className="text-white/60 leading-relaxed text-lg whitespace-pre-line">
-                  {journey.arcDescription}
+                  {linkGlossaryTermsText(journey.arcDescription)}
                 </p>
               </div>
             )}
@@ -575,7 +576,7 @@ export default function JourneyDetailPage() {
 
           {/* Arc Description */}
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-12 font-display italic">
-            {journey.arcDescription || journey.description}
+            {linkGlossaryTermsText(journey.arcDescription || journey.description)}
           </p>
 
           {/* Route Map */}
@@ -648,7 +649,7 @@ export default function JourneyDetailPage() {
 
                   {/* Day Description */}
                   <p className="text-muted-foreground leading-relaxed text-lg">
-                    {day.description}
+                    {linkGlossaryTermsText(day.description)}
                   </p>
                 </div>
               ))}
