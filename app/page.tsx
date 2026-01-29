@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import HeroSearch from "@/components/HeroSearch";
 
 interface Settings {
   hero_image_url?: string;
@@ -95,7 +94,7 @@ export default function HomePage() {
         {heroImage ? (
           <Image
             src={heroImage}
-            alt="Private cultural journeys through Morocco - desert landscapes, ancient medinas, and Atlas Mountains"
+            alt="Morocco"
             fill
             className="object-cover"
             priority
@@ -130,9 +129,6 @@ export default function HomePage() {
                 </span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
-              
-              {/* Search */}
-              <HeroSearch />
             </div>
           </div>
         </div>
@@ -157,20 +153,25 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          JOURNEYS: Clean carousel layout
+          JOURNEYS: Stacked asymmetric layout (not carousel)
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 bg-sand">
-        <div className="container mx-auto px-6 lg:px-16">
-          <div className="text-center mb-16">
-            <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
-              Explore More
-            </p>
-            <h2 className="text-2xl md:text-3xl tracking-[0.15em] font-light mb-4">
-              Routes Worth Taking
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Private journeys shaped around what matters to you
-            </p>
+      <section className="py-20 md:py-28 bg-[#f5f2ed]">
+        <div className="container mx-auto px-8 md:px-16 lg:px-20">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
+            <div>
+              <p className="text-[10px] tracking-[0.3em] uppercase text-foreground/40 mb-4">
+                Journeys
+              </p>
+              <h2 className="font-serif text-3xl md:text-4xl">
+                Routes worth taking
+              </h2>
+            </div>
+            <Link
+              href="/journeys"
+              className="mt-6 md:mt-0 text-xs tracking-[0.15em] uppercase text-foreground/60 hover:text-foreground transition-colors"
+            >
+              View all journeys →
+            </Link>
           </div>
 
           {loading ? (
@@ -178,77 +179,51 @@ export default function HomePage() {
               <div className="w-6 h-6 border border-foreground/20 border-t-foreground/60 rounded-full animate-spin" />
             </div>
           ) : (
-            <div className="relative max-w-5xl mx-auto">
-              {/* Left Arrow */}
-              <button
-                onClick={() => {
-                  const container = document.getElementById('home-journeys-carousel');
-                  if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
-                }}
-                className="absolute -left-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
-                aria-label="Previous"
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <polyline points="10,3 5,8 10,13" />
-                </svg>
-              </button>
-
-              {/* Carousel */}
-              <div
-                id="home-journeys-carousel"
-                className="flex gap-6 overflow-x-auto scrollbar-hide"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {journeys.map((journey) => (
-                  <Link
-                    key={journey.slug}
-                    href={`/journeys/${journey.slug}`}
-                    className="group flex-shrink-0 w-[280px]"
-                  >
-                    <div className="relative aspect-[4/5] mb-4 overflow-hidden bg-[#e8e0d4]">
-                      {journey.heroImage && (
-                        <Image
-                          src={journey.heroImage}
-                          alt={`${journey.title} - ${journey.duration || 'multi-day'} private Morocco journey`}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-700"
-                        />
-                      )}
+            <div className="space-y-16 md:space-y-24">
+              {journeys.slice(0, 3).map((journey, index) => (
+                <Link
+                  key={journey.slug}
+                  href={`/journeys/${journey.slug}`}
+                  className="group block"
+                >
+                  <div className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 md:gap-16 items-center`}>
+                    {/* Image */}
+                    <div className="w-full md:w-1/2 relative">
+                      <div className="aspect-[3/4] relative overflow-hidden bg-[#d4cdc4]">
+                        {journey.heroImage && (
+                          <Image
+                            src={journey.heroImage}
+                            alt={journey.title}
+                            fill
+                            className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                          />
+                        )}
+                      </div>
                     </div>
-                    <p className="text-xs tracking-[0.15em] uppercase text-muted-foreground mb-1">
-                      {journey.duration || "Multi-day"}
-                    </p>
-                    <h3 className="font-serif text-lg group-hover:opacity-70 transition-opacity">
-                      {journey.title}
-                    </h3>
-                  </Link>
-                ))}
-              </div>
-
-              {/* Right Arrow */}
-              <button
-                onClick={() => {
-                  const container = document.getElementById('home-journeys-carousel');
-                  if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
-                }}
-                className="absolute -right-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
-                aria-label="Next"
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <polyline points="6,3 11,8 6,13" />
-                </svg>
-              </button>
+                    
+                    {/* Content */}
+                    <div className="w-full md:w-1/2">
+                      <p className="text-[10px] tracking-[0.3em] uppercase text-foreground/40 mb-4">
+                        {journey.duration || "Multi-day journey"}
+                      </p>
+                      <h3 className="font-serif text-2xl md:text-3xl mb-4 group-hover:text-foreground/70 transition-colors">
+                        {journey.title}
+                      </h3>
+                      <p className="text-sm text-foreground/60 leading-relaxed mb-6 line-clamp-3">
+                        {journey.description}
+                      </p>
+                      <span className="inline-flex items-center gap-2 text-xs tracking-[0.15em] uppercase">
+                        <span className="border-b border-foreground/30 pb-0.5 group-hover:border-foreground transition-colors">
+                          Explore
+                        </span>
+                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           )}
-
-          <div className="text-center mt-12">
-            <Link
-              href="/journeys"
-              className="text-xs tracking-[0.2em] uppercase border-b border-foreground pb-1 hover:opacity-60 transition-opacity"
-            >
-              View All Journeys
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -453,11 +428,6 @@ export default function HomePage() {
                   </blockquote>
                   <p className="text-xs tracking-[0.2em] uppercase text-foreground/50">
                     — {testimonials[testimonialIndex]?.author}
-                    {testimonials[testimonialIndex]?.journeyTitle && (
-                      <span className="text-foreground/30">
-                        {" "}· {testimonials[testimonialIndex]?.journeyTitle}
-                      </span>
-                    )}
                   </p>
                 </div>
 
