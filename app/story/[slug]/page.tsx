@@ -100,16 +100,18 @@ export default function StoryPage() {
     fetch("/api/journeys")
       .then((res) => res.json())
       .then((data) => {
-        const allJourneys = data.journeys || [];
+        const allJourneys = (data.journeys || []).filter(
+          (j: any) => j.journeyType !== "epic"
+        );
+        
+        if (allJourneys.length === 0) return;
+        
         const storyTags = story.tags
           ? story.tags.toLowerCase().split(",").map((t) => t.trim())
           : [];
         const storyRegion = story.region?.toLowerCase() || "";
         
         const matched = allJourneys.filter((j: any) => {
-          // Skip epic journeys
-          if (j.journeyType === "epic") return false;
-          
           const destinations = (j.destinations || "").toLowerCase();
           const focus = (j.focus || "").toLowerCase();
           
@@ -124,7 +126,12 @@ export default function StoryPage() {
           return false;
         });
         
-        setRelatedJourneys(matched.slice(0, 4));
+        // If we found matches, use them; otherwise show first few journeys
+        if (matched.length > 0) {
+          setRelatedJourneys(matched.slice(0, 4));
+        } else {
+          setRelatedJourneys(allJourneys.slice(0, 4));
+        }
       });
   }, [story]);
 
