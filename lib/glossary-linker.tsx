@@ -55,6 +55,97 @@ glossaryData.forEach(category => {
       termMap.set('maâlems', { id: term.id, term: 'maâlems' });
       termMap.set('maalems', { id: term.id, term: 'maalems' });
     }
+    
+    // Landmark variations
+    if (lowerTerm === 'medersa ben youssef') {
+      termMap.set('ben youssef medersa', { id: term.id, term: 'Ben Youssef Medersa' });
+      termMap.set('madrasa ben youssef', { id: term.id, term: 'Madrasa Ben Youssef' });
+    }
+    if (lowerTerm === 'palais bahia') {
+      termMap.set('bahia palace', { id: term.id, term: 'Bahia Palace' });
+    }
+    if (lowerTerm === 'palais el badi') {
+      termMap.set('el badi palace', { id: term.id, term: 'El Badi Palace' });
+      termMap.set('badi palace', { id: term.id, term: 'Badi Palace' });
+    }
+    if (lowerTerm === 'koutoubia mosque') {
+      termMap.set('koutoubia', { id: term.id, term: 'Koutoubia' });
+      termMap.set('kutubiyya', { id: term.id, term: 'Kutubiyya' });
+    }
+    if (lowerTerm === 'jardin majorelle') {
+      termMap.set('majorelle garden', { id: term.id, term: 'Majorelle Garden' });
+      termMap.set('majorelle gardens', { id: term.id, term: 'Majorelle Gardens' });
+    }
+    if (lowerTerm === 'jemaa el-fna') {
+      termMap.set('jemaa el fna', { id: term.id, term: 'Jemaa el Fna' });
+      termMap.set('djemaa el fna', { id: term.id, term: 'Djemaa el Fna' });
+      termMap.set('djemaa el-fna', { id: term.id, term: 'Djemaa el-Fna' });
+      termMap.set('place jemaa el-fna', { id: term.id, term: 'Place Jemaa el-Fna' });
+    }
+    if (lowerTerm === 'aït benhaddou') {
+      termMap.set('ait benhaddou', { id: term.id, term: 'Ait Benhaddou' });
+      termMap.set('ait ben haddou', { id: term.id, term: 'Ait Ben Haddou' });
+      termMap.set('aït ben haddou', { id: term.id, term: 'Aït Ben Haddou' });
+    }
+    if (lowerTerm === 'fes el-bali') {
+      termMap.set('fes el bali', { id: term.id, term: 'Fes el Bali' });
+      termMap.set('fez el-bali', { id: term.id, term: 'Fez el-Bali' });
+      termMap.set('fez el bali', { id: term.id, term: 'Fez el Bali' });
+    }
+    if (lowerTerm === 'chouara tannery') {
+      termMap.set('chouara tanneries', { id: term.id, term: 'Chouara Tanneries' });
+      termMap.set('fes tannery', { id: term.id, term: 'Fes Tannery' });
+      termMap.set('fes tanneries', { id: term.id, term: 'Fes Tanneries' });
+    }
+    if (lowerTerm === 'hassan tower') {
+      termMap.set('tour hassan', { id: term.id, term: 'Tour Hassan' });
+    }
+    if (lowerTerm === 'todra gorge') {
+      termMap.set('todgha gorge', { id: term.id, term: 'Todgha Gorge' });
+      termMap.set('gorges du todra', { id: term.id, term: 'Gorges du Todra' });
+    }
+    if (lowerTerm === 'dades valley') {
+      termMap.set('dades gorge', { id: term.id, term: 'Dades Gorge' });
+      termMap.set('gorges du dades', { id: term.id, term: 'Gorges du Dades' });
+    }
+    if (lowerTerm === 'essaouira medina') {
+      termMap.set('essaouira', { id: term.id, term: 'Essaouira' });
+      termMap.set('mogador', { id: term.id, term: 'Mogador' });
+    }
+    
+    // City/region variations
+    if (lowerTerm === 'fes') {
+      termMap.set('fez', { id: term.id, term: 'Fez' });
+    }
+    if (lowerTerm === 'marrakech') {
+      termMap.set('marrakesh', { id: term.id, term: 'Marrakesh' });
+    }
+    if (lowerTerm === 'tangier') {
+      termMap.set('tanger', { id: term.id, term: 'Tanger' });
+      termMap.set('tanja', { id: term.id, term: 'Tanja' });
+    }
+    if (lowerTerm === 'meknes') {
+      termMap.set('meknès', { id: term.id, term: 'Meknès' });
+      termMap.set('meknas', { id: term.id, term: 'Meknas' });
+    }
+    if (lowerTerm === 'draa valley') {
+      termMap.set('draa', { id: term.id, term: 'Draa' });
+      termMap.set('drâa valley', { id: term.id, term: 'Drâa Valley' });
+      termMap.set('vallee du draa', { id: term.id, term: 'Vallée du Draa' });
+    }
+    if (lowerTerm === 'high atlas') {
+      termMap.set('haut atlas', { id: term.id, term: 'Haut Atlas' });
+      termMap.set('atlas mountains', { id: term.id, term: 'Atlas Mountains' });
+    }
+    if (lowerTerm === 'rif mountains') {
+      termMap.set('the rif', { id: term.id, term: 'the Rif' });
+      termMap.set('rif', { id: term.id, term: 'Rif' });
+    }
+    if (lowerTerm === 'souss valley') {
+      termMap.set('souss', { id: term.id, term: 'Souss' });
+      termMap.set('sous valley', { id: term.id, term: 'Sous Valley' });
+      termMap.set('sous', { id: term.id, term: 'Sous' });
+    }
   });
 });
 
