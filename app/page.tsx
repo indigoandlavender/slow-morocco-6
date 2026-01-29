@@ -95,7 +95,7 @@ export default function HomePage() {
         {heroImage ? (
           <Image
             src={heroImage}
-            alt="Morocco"
+            alt="Private cultural journeys through Morocco - desert landscapes, ancient medinas, and Atlas Mountains"
             fill
             className="object-cover"
             priority
@@ -209,7 +209,7 @@ export default function HomePage() {
                       {journey.heroImage && (
                         <Image
                           src={journey.heroImage}
-                          alt={journey.title}
+                          alt={`${journey.title} - ${journey.duration || 'multi-day'} private Morocco journey`}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-700"
                         />

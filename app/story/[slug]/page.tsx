@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import StoryBody from "@/components/StoryBody";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 interface Story {
   slug: string;
@@ -315,13 +316,20 @@ export default function StoryPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      
+      {/* Breadcrumb Schema */}
+      <BreadcrumbSchema items={[
+        { name: "Home", url: "https://slowmorocco.com" },
+        { name: "Stories", url: "https://slowmorocco.com/stories" },
+        { name: story.title, url: `https://slowmorocco.com/story/${story.slug}` },
+      ]} />
 
       {/* Hero Image */}
       {story.heroImage && (
         <section className="relative w-full h-[60vh] md:h-[70vh]">
           <Image
             src={story.heroImage}
-            alt={story.title}
+            alt={story.heroCaption || `${story.title} - ${story.category || 'Morocco'} story from Slow Morocco`}
             fill
             className="object-cover"
             priority

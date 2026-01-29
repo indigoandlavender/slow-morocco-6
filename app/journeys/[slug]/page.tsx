@@ -7,6 +7,8 @@ import Image from "next/image";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { linkGlossaryTermsText } from "@/lib/glossary-linker";
+import TouristTripSchema from "@/components/seo/TouristTripSchema";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import {
   IconClock,
   IconCamel,
@@ -317,12 +319,20 @@ export default function JourneyDetailPage() {
   if (journey.journeyType === 'epic') {
     return (
       <div className="bg-[#1a1a1a] min-h-screen text-white">
+        {/* SEO Schemas */}
+        <TouristTripSchema journey={journey} />
+        <BreadcrumbSchema items={[
+          { name: "Home", url: "https://slowmorocco.com" },
+          { name: "Epic Journeys", url: "https://slowmorocco.com/epic" },
+          { name: journey.title, url: `https://slowmorocco.com/journeys/${journey.slug}` },
+        ]} />
+
         {/* Hero Image */}
         <section className="relative h-[70vh] md:h-[80vh]">
           {journey.heroImage ? (
             <Image
               src={journey.heroImage}
-              alt={journey.title}
+              alt={`${journey.title} - ${journey.duration} epic journey across Morocco`}
               fill
               className="object-cover opacity-70"
               priority
@@ -532,12 +542,20 @@ export default function JourneyDetailPage() {
   // Regular Journey Layout
   return (
     <div className="bg-background min-h-screen">
+      {/* SEO Schemas */}
+      <TouristTripSchema journey={journey} />
+      <BreadcrumbSchema items={[
+        { name: "Home", url: "https://slowmorocco.com" },
+        { name: "Journeys", url: "https://slowmorocco.com/journeys" },
+        { name: journey.title, url: `https://slowmorocco.com/journeys/${journey.slug}` },
+      ]} />
+
       {/* Hero Image */}
       <section className="relative h-[60vh] md:h-[70vh] bg-[#e8e0d4]">
         {journey.heroImage && (
           <Image
             src={journey.heroImage}
-            alt={journey.title}
+            alt={`${journey.title} - ${journey.durationDays}-day private journey through ${journey.destinations || 'Morocco'}`}
             fill
             className="object-cover"
             priority

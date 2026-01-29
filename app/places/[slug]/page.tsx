@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ChevronLeft, MapPin, Clock, Ticket } from "lucide-react";
 import { linkGlossaryTermsHTML } from "@/lib/glossary-linker";
+import PlaceSchema from "@/components/seo/PlaceSchema";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 
 interface Place {
@@ -131,14 +133,20 @@ export default function PlaceDetailPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      
+      {/* SEO Schemas */}
+      <PlaceSchema place={place} />
+      <BreadcrumbSchema items={[
+        { name: "Home", url: "https://slowmorocco.com" },
+        { name: "Places", url: "https://slowmorocco.com/places" },
+        { name: place.title, url: `https://slowmorocco.com/places/${place.slug}` },
+      ]} />
 
       {/* Hero Image */}
       <section className="relative h-[60vh] md:h-[70vh]">
         {place.heroImage ? (
           <Image
             src={place.heroImage}
-            alt={place.title}
+            alt={place.heroCaption || `${place.title} in ${place.destination}, Morocco - ${place.category || 'attraction'}`}
             fill
             className="object-cover"
             priority
