@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import HeroSearch from "@/components/HeroSearch";
 
 interface Settings {
   hero_image_url?: string;
@@ -129,6 +130,9 @@ export default function HomePage() {
                 </span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
+              
+              {/* Search */}
+              <HeroSearch />
             </div>
           </div>
         </div>
