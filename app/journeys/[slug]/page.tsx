@@ -6,9 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { linkGlossaryTermsText } from "@/lib/glossary-linker";
-import TouristTripSchema from "@/components/seo/TouristTripSchema";
-import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import {
   IconClock,
   IconCamel,
@@ -25,6 +22,7 @@ import {
   Icon4x4,
   IconStar,
 } from "@/components/icons";
+import ShareTools from "@/components/ShareTools";
 
 // Map activity keywords to icons
 const getActivityIcon = (activity: string) => {
@@ -67,7 +65,6 @@ interface Journey {
   journeyType?: string;
   epicPrice?: number;
   price?: number;
-  destinations?: string;
 }
 
 interface ItineraryDay {
@@ -87,42 +84,63 @@ interface ItineraryDay {
 // Journeys Carousel Component
 function JourneysCarousel({ currentSlug }: { currentSlug: string }) {
   const [journeys, setJourneys] = useState<Journey[]>([]);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/journeys")
       .then((r) => r.json())
       .then((data) => {
-        // Filter out current journey and epic journeys
+        // Filter out current journey
         const otherJourneys = (data.journeys || []).filter(
-          (j: Journey) => j.slug !== currentSlug && j.journeyType !== "epic"
+          (j: Journey) => j.slug !== currentSlug
         );
         setJourneys(otherJourneys);
       })
       .catch(console.error);
   }, [currentSlug]);
 
+  const scroll = (direction: "left" | "right") => {
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const cardWidth = 280 + 24; // card width + gap
+    const scrollAmount = direction === "left" ? -cardWidth * 2 : cardWidth * 2;
+    
+    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  };
+
+  const handleScroll = () => {
+    if (containerRef.current) {
+      setScrollPosition(containerRef.current.scrollLeft);
+    }
+  };
+
   if (journeys.length === 0) return null;
+
+  const canScrollLeft = scrollPosition > 0;
+  const canScrollRight = containerRef.current
+    ? scrollPosition < containerRef.current.scrollWidth - containerRef.current.clientWidth - 10
+    : true;
 
   return (
     <div className="relative">
       {/* Left Arrow */}
       <button
-        onClick={() => {
-          const container = document.getElementById('more-journeys-carousel');
-          if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
-        }}
-        className="absolute -left-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
-        aria-label="Previous"
+        onClick={() => scroll("left")}
+        className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center transition-opacity ${
+          canScrollLeft ? "opacity-100 hover:bg-muted" : "opacity-0 pointer-events-none"
+        }`}
+        aria-label="Scroll left"
       >
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polyline points="10,3 5,8 10,13" />
-        </svg>
+        <ChevronLeft className="w-5 h-5" />
       </button>
 
       {/* Carousel Container */}
       <div
-        id="more-journeys-carousel"
-        className="flex gap-6 overflow-x-auto scrollbar-hide"
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="flex gap-6 overflow-x-auto scrollbar-hide px-12"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {journeys.map((journey) => (
@@ -141,130 +159,30 @@ function JourneysCarousel({ currentSlug }: { currentSlug: string }) {
                 />
               )}
             </div>
-            <p className="text-xs text-muted-foreground tracking-wide mb-1">
-              {journey.durationDays} Days
-            </p>
-            <h3 className="font-serif text-lg group-hover:opacity-70 transition-opacity">{journey.title}</h3>
-          </Link>
-        ))}
-      </div>
-
-      {/* Right Arrow */}
-      <button
-        onClick={() => {
-          const container = document.getElementById('more-journeys-carousel');
-          if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
-        }}
-        className="absolute -right-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
-        aria-label="Next"
-      >
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polyline points="6,3 11,8 6,13" />
-        </svg>
-      </button>
-    </div>
-  );
-}
-
-// Related Stories Carousel Component
-function RelatedStoriesCarousel({ journey }: { journey: Journey & { destinations?: string } }) {
-  const [stories, setStories] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetch("/api/stories")
-      .then((r) => r.json())
-      .then((data) => {
-        const allStories = data.stories || [];
-        const destinations = (journey.destinations || "").toLowerCase();
-        const focus = (journey.focus || "").toLowerCase();
-        
-        // Match stories by tags or region against journey destinations/focus
-        const matched = allStories.filter((s: any) => {
-          const storyTags = (s.tags || "").toLowerCase();
-          const storyRegion = (s.region || "").toLowerCase();
-          
-          // Check if any destination appears in story tags or region
-          const destWords = destinations.split(/[,|]/).map((d: string) => d.trim()).filter(Boolean);
-          for (const dest of destWords) {
-            if (storyTags.includes(dest) || storyRegion.includes(dest)) return true;
-          }
-          
-          // Check focus against tags
-          if (focus && storyTags.includes(focus)) return true;
-          
-          return false;
-        });
-        
-        // If matches found use them, otherwise show first few stories
-        if (matched.length > 0) {
-          setStories(matched.slice(0, 6));
-        } else {
-          setStories(allStories.slice(0, 6));
-        }
-      })
-      .catch(console.error);
-  }, [journey]);
-
-  if (stories.length === 0) return null;
-
-  return (
-    <div className="relative">
-      {/* Left Arrow */}
-      <button
-        onClick={() => {
-          const container = document.getElementById('related-stories-carousel');
-          if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
-        }}
-        className="absolute -left-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
-        aria-label="Previous"
-      >
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polyline points="10,3 5,8 10,13" />
-        </svg>
-      </button>
-
-      {/* Carousel Container */}
-      <div
-        id="related-stories-carousel"
-        className="flex gap-6 overflow-x-auto scrollbar-hide"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-      >
-        {stories.map((story) => (
-          <Link
-            key={story.slug}
-            href={`/story/${story.slug}`}
-            className="flex-shrink-0 w-[260px] group"
-          >
-            <div className="relative aspect-[4/3] mb-3 overflow-hidden bg-[#e8e0d4]">
-              {story.heroImage && (
-                <Image
-                  src={story.heroImage}
-                  alt={story.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+            <h3 className="font-serif text-lg mb-1">{journey.title}</h3>
+            <div className="flex items-baseline justify-between">
+              <p className="text-xs text-muted-foreground tracking-wide">
+                {journey.durationDays} Days
+              </p>
+              {Number((journey as any).price) > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  From €{Number((journey as any).price).toLocaleString()}
+                </p>
               )}
             </div>
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-              {story.category}
-            </p>
-            <h3 className="font-serif text-base group-hover:opacity-70 transition-opacity">{story.title}</h3>
           </Link>
         ))}
       </div>
 
       {/* Right Arrow */}
       <button
-        onClick={() => {
-          const container = document.getElementById('related-stories-carousel');
-          if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
-        }}
-        className="absolute -right-4 top-1/3 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-background/80 border border-foreground/10 flex items-center justify-center hover:bg-background hover:border-foreground/20 transition-all opacity-70 hover:opacity-100"
-        aria-label="Next"
+        onClick={() => scroll("right")}
+        className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center transition-opacity ${
+          canScrollRight ? "opacity-100 hover:bg-muted" : "opacity-0 pointer-events-none"
+        }`}
+        aria-label="Scroll right"
       >
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polyline points="6,3 11,8 6,13" />
-        </svg>
+        <ChevronRight className="w-5 h-5" />
       </button>
     </div>
   );
@@ -319,20 +237,12 @@ export default function JourneyDetailPage() {
   if (journey.journeyType === 'epic') {
     return (
       <div className="bg-[#1a1a1a] min-h-screen text-white">
-        {/* SEO Schemas */}
-        <TouristTripSchema journey={journey} />
-        <BreadcrumbSchema items={[
-          { name: "Home", url: "https://slowmorocco.com" },
-          { name: "Epic Journeys", url: "https://slowmorocco.com/epic" },
-          { name: journey.title, url: `https://slowmorocco.com/journeys/${journey.slug}` },
-        ]} />
-
         {/* Hero Image */}
         <section className="relative h-[70vh] md:h-[80vh]">
           {journey.heroImage ? (
             <Image
               src={journey.heroImage}
-              alt={`${journey.title} - ${journey.duration} epic journey across Morocco`}
+              alt={journey.title}
               fill
               className="object-cover opacity-70"
               priority
@@ -370,7 +280,7 @@ export default function JourneyDetailPage() {
             {/* The Promise */}
             <div className="mb-20">
               <p className="text-xl md:text-2xl text-white/80 leading-relaxed font-display italic">
-                {linkGlossaryTermsText(journey.description)}
+                {journey.description}
               </p>
             </div>
 
@@ -378,7 +288,7 @@ export default function JourneyDetailPage() {
             {journey.arcDescription && (
               <div className="mb-20">
                 <p className="text-white/60 leading-relaxed text-lg whitespace-pre-line">
-                  {linkGlossaryTermsText(journey.arcDescription)}
+                  {journey.arcDescription}
                 </p>
               </div>
             )}
@@ -542,20 +452,12 @@ export default function JourneyDetailPage() {
   // Regular Journey Layout
   return (
     <div className="bg-background min-h-screen">
-      {/* SEO Schemas */}
-      <TouristTripSchema journey={journey} />
-      <BreadcrumbSchema items={[
-        { name: "Home", url: "https://slowmorocco.com" },
-        { name: "Journeys", url: "https://slowmorocco.com/journeys" },
-        { name: journey.title, url: `https://slowmorocco.com/journeys/${journey.slug}` },
-      ]} />
-
       {/* Hero Image */}
       <section className="relative h-[60vh] md:h-[70vh] bg-[#e8e0d4]">
         {journey.heroImage && (
           <Image
             src={journey.heroImage}
-            alt={`${journey.title} - ${journey.durationDays}-day private journey through ${journey.destinations || 'Morocco'}`}
+            alt={journey.title}
             fill
             className="object-cover"
             priority
@@ -566,14 +468,21 @@ export default function JourneyDetailPage() {
       {/* Content */}
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-6 lg:px-16 max-w-3xl">
-          {/* Back Link */}
-          <Link
-            href="/journeys"
-            className="inline-flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors mb-12"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to All Journeys
-          </Link>
+          {/* Back Link & Share */}
+          <div className="flex items-center justify-between mb-12">
+            <Link
+              href="/journeys"
+              className="inline-flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to All Journeys
+            </Link>
+            <ShareTools 
+              title={journey.title}
+              description={journey.arcDescription || journey.description}
+              imageUrl={journey.heroImage}
+            />
+          </div>
 
           {/* Duration & Price */}
           <div className="flex items-baseline gap-6 mb-4">
@@ -594,7 +503,7 @@ export default function JourneyDetailPage() {
 
           {/* Arc Description */}
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-12 font-display italic">
-            {linkGlossaryTermsText(journey.arcDescription || journey.description)}
+            {journey.arcDescription || journey.description}
           </p>
 
           {/* Route Map */}
@@ -667,7 +576,7 @@ export default function JourneyDetailPage() {
 
                   {/* Day Description */}
                   <p className="text-muted-foreground leading-relaxed text-lg">
-                    {linkGlossaryTermsText(day.description)}
+                    {day.description}
                   </p>
                 </div>
               ))}
@@ -675,59 +584,10 @@ export default function JourneyDetailPage() {
         </div>
       </section>
 
-      {/* Related Stories */}
-      <section className="py-24 md:py-32 bg-sand">
-        <div className="container mx-auto px-6 lg:px-16">
-          <div className="text-center mb-16">
-            <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
-              Explore More
-            </p>
-            <h2 className="text-2xl md:text-3xl tracking-[0.15em] font-light mb-4">
-              Related Stories
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Discover the history and culture behind this journey
-            </p>
-          </div>
-          <div className="max-w-5xl mx-auto">
-            <RelatedStoriesCarousel journey={journey as Journey & { destinations?: string }} />
-          </div>
-          <div className="text-center mt-12">
-            <Link
-              href="/stories"
-              className="text-xs tracking-[0.2em] uppercase border-b border-foreground pb-1 hover:opacity-60 transition-opacity"
-            >
-              View All Stories
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* More Journeys Carousel */}
-      <section className="py-24 md:py-32 bg-background border-t border-border">
+      <section className="py-16 md:py-20 border-t border-border">
         <div className="container mx-auto px-6 lg:px-16">
-          <div className="text-center mb-16">
-            <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
-              Explore More
-            </p>
-            <h2 className="text-2xl md:text-3xl tracking-[0.15em] font-light mb-4">
-              More Journeys
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Other curated routes through Morocco
-            </p>
-          </div>
-          <div className="max-w-5xl mx-auto">
-            <JourneysCarousel currentSlug={slug} />
-          </div>
-          <div className="text-center mt-12">
-            <Link
-              href="/journeys"
-              className="text-xs tracking-[0.2em] uppercase border-b border-foreground pb-1 hover:opacity-60 transition-opacity"
-            >
-              View All Journeys
-            </Link>
-          </div>
+          <JourneysCarousel currentSlug={slug} />
         </div>
       </section>
 
