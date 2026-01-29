@@ -657,22 +657,58 @@ export default function JourneyDetailPage() {
       </section>
 
       {/* Related Stories */}
-      <section className="py-16 md:py-20 border-t border-border">
-        <div className="container mx-auto px-6 lg:px-16 max-w-5xl">
-          <h2 className="uppercase tracking-wide text-xs font-medium mb-8 text-muted-foreground">
-            Related Stories
-          </h2>
-          <RelatedStoriesCarousel journey={journey as Journey & { destinations?: string }} />
+      <section className="py-24 md:py-32 bg-sand">
+        <div className="container mx-auto px-6 lg:px-16">
+          <div className="text-center mb-16">
+            <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
+              Explore More
+            </p>
+            <h2 className="text-2xl md:text-3xl tracking-[0.15em] font-light mb-4">
+              Related Stories
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Discover the history and culture behind this journey
+            </p>
+          </div>
+          <div className="max-w-5xl mx-auto">
+            <RelatedStoriesCarousel journey={journey as Journey & { destinations?: string }} />
+          </div>
+          <div className="text-center mt-12">
+            <Link
+              href="/stories"
+              className="text-xs tracking-[0.2em] uppercase border-b border-foreground pb-1 hover:opacity-60 transition-opacity"
+            >
+              View All Stories
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* More Journeys Carousel */}
-      <section className="py-16 md:py-20 border-t border-border">
-        <div className="container mx-auto px-6 lg:px-16 max-w-5xl">
-          <h2 className="uppercase tracking-wide text-xs font-medium mb-8 text-muted-foreground">
-            More Journeys
-          </h2>
-          <JourneysCarousel currentSlug={slug} />
+      <section className="py-24 md:py-32 bg-background border-t border-border">
+        <div className="container mx-auto px-6 lg:px-16">
+          <div className="text-center mb-16">
+            <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
+              Explore More
+            </p>
+            <h2 className="text-2xl md:text-3xl tracking-[0.15em] font-light mb-4">
+              More Journeys
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Other curated routes through Morocco
+            </p>
+          </div>
+          <div className="max-w-5xl mx-auto">
+            <JourneysCarousel currentSlug={slug} />
+          </div>
+          <div className="text-center mt-12">
+            <Link
+              href="/journeys"
+              className="text-xs tracking-[0.2em] uppercase border-b border-foreground pb-1 hover:opacity-60 transition-opacity"
+            >
+              View All Journeys
+            </Link>
+          </div>
         </div>
       </section>
 
